@@ -1,0 +1,55 @@
+<BsNavbar
+  @type='dark'
+  @fluid={{false}}
+  @backgroundColor='none'
+  class='navbar-transparent navbar-theme-primary mb-4'
+  as |navbar|
+>
+  <LinkTo @route='index' class='navbar-brand'>Doxxed by celsius</LinkTo>
+  <navbar.nav class='me-auto' as |nav|>
+    <nav.linkTo @route='customers'>Customers</nav.linkTo>
+  </navbar.nav>
+  <navbar.nav as |nav|>
+    <nav.dropdown as |dd|>
+      <BsForm @formLayout='inline' as |form|>
+        <form.element as |el|>
+          <div class='input-group me-2 me-lg-3 fmxw-400'>
+            <span class='input-group-text'>
+              <svg
+                class='icon icon-xs'
+                x-description='Heroicon name: solid/search'
+                xmlns='http://www.w3.org/2000/svg'
+                viewBox='0 0 20 20'
+                fill='currentColor'
+                aria-hidden='true'
+              >
+                <path
+                  fill-rule='evenodd'
+                  d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
+                  clip-rule='evenodd'
+                ></path>
+              </svg>
+            </span>
+            <el.control
+              autocomplete='off'
+              placeholder='Search a customer'
+              @onChange={{(fn (perform this.searchCustomersTask) dd)}}
+              @value={{this.searchTerm}}
+            />
+          </div>
+        </form.element>
+      </BsForm>
+      <dd.menu @align='right' as |ddm|>
+        {{#each this.searchCustomers as |customer|}}
+          <ddm.item>
+            <ddm.link-to
+              @route='customers.customer'
+              @model={{customer.scheduleFLine}}
+              {{on 'click' (fn this.onCustomerSelected dd)}}
+            >{{customer.name}}</ddm.link-to>
+          </ddm.item>
+        {{/each}}
+      </dd.menu>
+    </nav.dropdown>
+  </navbar.nav>
+</BsNavbar>

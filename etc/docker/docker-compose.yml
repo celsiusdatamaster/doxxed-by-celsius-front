@@ -1,0 +1,23 @@
+version: "3.7"
+
+networks:
+  celsius:
+    external: true
+
+services:
+  celsius-front:
+    container_name: front
+    hostname: front
+    image: doxxedbycelsius/front:latest
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.front-https.rule=Host(`doxxedbycelsius.com`)
+      - traefik.http.routers.front-https.entrypoints=https
+      - traefik.http.routers.front-https.tls=true
+      - traefik.http.routers.front-https.tls.certresolver=leresolver
+      - traefik.http.routers.front-https.middlewares=ratelimit
+      - traefik.http.services.front-https.loadbalancer.server.port=80
+      - traefik.http.middlewares.ratelimit.ratelimit.average=10
+      - traefik.http.middlewares.ratelimit.ratelimit.burst=50
+    networks:
+      - celsius

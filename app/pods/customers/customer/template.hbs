@@ -1,0 +1,151 @@
+{{page-title this.customer.name}}
+
+<main class='container'>
+
+  {{#if this.loadCustomerTask.isRunning}}
+    <div class='row justify-content-md-center'>
+      <div class='col-md-auto'>
+        <div class='alert alert-primary' role='alert'>
+          Loading customer ...
+        </div>
+      </div>
+    </div>
+  {{else}}
+    <div class='row'>
+      <div class='col-12 col-xl-4'>
+        <div class='row'>
+          <div class='col-12 mb-4'>
+            <div class='card shadow border-0 text-center p-0'>
+              <div
+                class='profile-cover rounded-top'
+                data-background='../assets/img/profile-cover.jpg'
+              ></div>
+              <div class='card-body pb-5'>
+                {{#if this.customer.scheduleFLine}}
+                  <img
+                    src='https://adorable-avatars.broken.services/{{this.customer.scheduleFLine}}'
+                    class='avatar-xl rounded-circle mx-auto mt-n7 mb-4'
+                    alt='{{this.customer.name}} Portrait'
+                  />
+                {{/if}}
+                <h4 class='h3'>{{this.customer.name}}</h4>
+                <h5 class='fw-normal'>{{this.customer.scheduleFLine}}</h5>
+                <p class='text-gray mb-4'>{{this.customer.address}}</p>
+                <ul class='list-group list-group-flush'>
+                  <li
+                    class='list-group-item d-flex align-items-center justify-content-between px-0 border-bottom'
+                  >
+                    <div>
+                      <h3 class='h6 mb-1'>Is the claim contingent, unliquidated,
+                        disputed ?</h3>
+                    </div>
+                    <div>
+                      <div class='form-check form-switch'>
+                        {{#if this.customer.contingentClaim}}
+                          <input
+                            class='form-check-input'
+                            type='checkbox'
+                            id='contingent-claim'
+                            disabled
+                            checked
+                          />
+                        {{else}}
+                          <input
+                            class='form-check-input'
+                            type='checkbox'
+                            id='contingent-claim'
+                            disabled
+                          />
+                        {{/if}}
+                      </div>
+                    </div>
+                  </li>
+                  <li
+                    class='list-group-item d-flex align-items-center justify-content-between px-0 border-bottom'
+                  >
+                    <div>
+                      <h3 class='h6 mb-1'>Is the claim subject to offset ?</h3>
+                    </div>
+                    <div>
+                      <div class='form-check form-switch'>
+                        {{#if this.customer.offsetClaim}}
+                          <input
+                            class='form-check-input'
+                            type='checkbox'
+                            id='offset-claim'
+                            disabled
+                            checked
+                          />
+                        {{else}}
+                          <input
+                            class='form-check-input'
+                            type='checkbox'
+                            id='offset-claim'
+                            disabled
+                          />
+                        {{/if}}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class='col-12 col-xl-8'>
+        <div class='row'>
+          <div class='col-12 mb-4'>
+            <div class='card border-0 shadow'>
+              <div class='card-header'>
+                <div class='row align-items-center'>
+                  <div class='col'>
+                    <h2 class='fs-5 fw-bold mb-0'>Lost
+                      <span class='text-danger'>{{format-number
+                          this.totalLost
+                          currency='USD'
+                          style='currency'
+                        }}</span>
+                      on Celsius Network</h2>
+                  </div>
+                </div>
+              </div>
+              <div class='table-responsive'>
+                <table class='table align-items-center table-flush'>
+                  <thead class='thead-light'>
+                    <tr>
+                      <th class='border-bottom' scope='col'>Token</th>
+                      <th class='border-bottom' scope='col'>Amount</th>
+                      <th class='border-bottom' scope='col'>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each this.customer.assets as |asset|}}
+                      <tr>
+                        <th class='text-gray-900' scope='row'>
+                          {{asset.token}}
+                        </th>
+                        <td class='fw-bolder text-gray-500'>
+                          {{format-number asset.amount}}
+                        </td>
+                        <td class='fw-bolder text-gray-500'>
+                          {{format-number
+                            asset.usdValue
+                            currency='USD'
+                            style='currency'
+                          }}
+                        </td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+</main>
