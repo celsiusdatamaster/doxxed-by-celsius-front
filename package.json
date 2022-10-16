@@ -23,6 +23,7 @@
     "test:ember": "ember test"
   },
   "devDependencies": {
+    "@amcharts/amcharts5": "^5.2.30",
     "@csstools/postcss-sass": "^5.0.1",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.8.1",
@@ -36,6 +37,7 @@
     "@types/ember__component": "^4.0.10",
     "@types/ember__controller": "^4.0.1",
     "@types/ember__debug": "^4.0.1",
+    "@types/ember__destroyable": "^4.0.0",
     "@types/ember__engine": "^4.0.2",
     "@types/ember__error": "^4.0.0",
     "@types/ember__object": "^4.0.4",
