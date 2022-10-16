@@ -5,13 +5,19 @@ import DataService from 'doxxed-by-celsius/services/data';
 import Customer from 'doxxed-by-celsius/objects/customer';
 import { tracked } from 'tracked-built-ins';
 import { task, timeout } from 'ember-concurrency';
+import Page from 'doxxed-by-celsius/objects/page';
+// @ts-ignore
+import { ref } from 'ember-ref-bucket';
 
 export default class Topbar extends Component {
   @tracked
-  searchCustomers: Customer[] = [];
+  searchCustomers?: Page<Customer>;
 
   @tracked
   searchTerm: string = '';
+
+  @ref('searchCustomerForm')
+  searchCustomerForm?: HTMLElement;
 
   @action
   async onCustomerSelected(dropdownMenu: BsDropdown) {
@@ -23,6 +29,10 @@ export default class Topbar extends Component {
     this,
     { restartable: true },
     async (dropdownMenu: BsDropdown, term: string) => {
+      if (term === this.searchTerm) {
+        return;
+      }
+      this.searchTerm = term;
       if (term === '') {
         dropdownMenu.closeDropdown();
         return;
@@ -35,7 +45,7 @@ export default class Topbar extends Component {
 
       try {
         const resp = await fetch(
-          `${DataService.API_URL}/customers/search?name=${term}`,
+          `${DataService.API_URL}/customers/list?nameFilter=${term}&page=0`,
           { signal }
         );
 
@@ -47,4 +57,17 @@ export default class Topbar extends Component {
       }
     }
   );
+
+  get popperOptions() {
+    return {
+      placement: 'bottom-end',
+      onFirstUpdate: () => {},
+      modifiers: [
+        {
+          name: 'flip',
+          enabled: true,
+        },
+      ],
+    };
+  }
 }

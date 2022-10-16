@@ -12,24 +12,16 @@
   <navbar.nav as |nav|>
     <nav.dropdown as |dd|>
       <BsForm @formLayout='inline' as |form|>
-        <form.element as |el|>
+        <form.element {{create-ref 'searchCustomerForm'}} as |el|>
           <div class='input-group me-2 me-lg-3 fmxw-400'>
             <span class='input-group-text'>
-              <svg
-                class='icon icon-xs'
-                x-description='Heroicon name: solid/search'
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 20 20'
-                fill='currentColor'
-                aria-hidden='true'
-              >
-                <path
-                  fill-rule='evenodd'
-                  d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
-                  clip-rule='evenodd'
-                ></path>
-              </svg>
+              {{#if this.searchCustomersTask.isRunning}}
+                <Icon::Spinner />
+              {{else}}
+                <Icon::Search />
+              {{/if}}
             </span>
+
             <el.control
               autocomplete='off'
               placeholder='Search a customer'
@@ -39,16 +31,33 @@
           </div>
         </form.element>
       </BsForm>
-      <dd.menu @align='right' as |ddm|>
-        {{#each this.searchCustomers as |customer|}}
+      <dd.menu
+        {{popper-tooltip this.searchCustomerForm this.popperOptions}}
+        as |ddm|
+      >
+        {{#each this.searchCustomers.content as |customer|}}
           <ddm.item>
-            <ddm.link-to
+            <ddm.linkTo
               @route='customers.customer'
               @model={{customer.scheduleFLine}}
               {{on 'click' (fn this.onCustomerSelected dd)}}
-            >{{customer.name}}</ddm.link-to>
+            >
+              <div class='d-flex bd-highlight'>
+                <div class='me-auto bd-highlight'>{{customer.name}}</div>
+                <div
+                  class='bd-highlight ms-2 text-success d-none d-md-flex'
+                >{{format-number
+                    customer.usdValue
+                    currency='USD'
+                    style='currency'
+                  }}</div>
+              </div>
+            </ddm.linkTo>
           </ddm.item>
         {{/each}}
+        {{#unless this.searchCustomers.content}}
+          <h6 class='dropdown-header'>No customers found</h6>
+        {{/unless}}
       </dd.menu>
     </nav.dropdown>
   </navbar.nav>
